@@ -10,14 +10,14 @@ async function listContacts() {
 }
 
 async function getContactById(contactId) {
-    let id = String(contactId)
+    const id = String(contactId)
     const contacts = await listContacts()
     const result = contacts.find(contact => contact.id === id)
     return result || null
 }
 
 async function removeContact(contactId) {
-    let id = String(contactId)
+    const id = String(contactId)
     const contacts = await listContacts()
     const index = contacts.findIndex(contact => contact.id === id)
     if (index === -1) {
@@ -42,7 +42,7 @@ async function addContact({name, email, phone}) {
 }
 
 async function updateContact(contactId, { name, email, phone }) {
-    let id = String(contactId)
+    const id = String(contactId)
     const contacts = await listContacts()
     const index = contacts.findIndex(contact => contact.id === id)
     if (index === -1) {
