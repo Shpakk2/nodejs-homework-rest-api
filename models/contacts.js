@@ -1,19 +1,62 @@
-// const fs = require('fs/promises')
+const fs = require('fs').promises;
+const path = require("path")
+const { nanoid } = require('nanoid');
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "contacts.json")
 
-const getContactById = async (contactId) => {}
+async function listContacts() {
+  const data = await fs.readFile(contactsPath, "utf-8")
+  return JSON.parse(data)
+}
 
-const removeContact = async (contactId) => {}
+async function getContactById(contactId) {
+    id = String(contactId)
+    const contacts = await listContacts()
+    const result = contacts.find(contact => contact.id === id)
+    return result || null
+}
 
-const addContact = async (body) => {}
+async function removeContact(contactId) {
+    id = String(contactId)
+    const contacts = await listContacts()
+    const index = contacts.findIndex(contact => contact.id === id)
+    if (index === -1) {
+        return null
+    }
+    const [result] = contacts.splice(index, 1)
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+    return result
+}
 
-const updateContact = async (contactId, body) => {}
+async function addContact({name, email, phone}) {
+    const contacts = await listContacts()
+    const newContact = {
+        id: nanoid(),
+        name,
+        email,
+        phone
+    }
+    contacts.push(newContact)
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+    return newContact
+}
+
+async function updateContact(contactId, { name, email, phone }) {
+    id = String(contactId)
+    const contacts = await listContacts()
+    const index = contacts.findIndex(contact => contact.id === id)
+    if (index === -1) {
+        return null
+    }
+  contacts[index] = { id, name, email, phone }
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+     return contacts[index] 
+}
 
 module.exports = {
-  listContacts,
-  getContactById,
+    listContacts,
+    getContactById,
+    addContact,
   removeContact,
-  addContact,
-  updateContact,
+    updateContact
 }
