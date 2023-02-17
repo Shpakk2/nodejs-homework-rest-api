@@ -33,7 +33,7 @@ userSchema.post('save', mongooseHandleError)
 
 const registerSchema = Joi.object({
     password: Joi.string().min(6).required(),
-    email: Joi.string().pattern(emailRegexp).required(),    
+    email: Joi.string().pattern(emailRegexp).message("валідність вашого email викликає підозри").required(),    
     subscription: Joi.string().required(),
 }) 
 
