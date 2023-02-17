@@ -19,7 +19,6 @@ const register = async (req, res) => {
     const result = await User.create({password: hashPassword, email, subscription})
     
     res.json({
-    // password: result.password,
     email: result.email,    
     subscription: result.subscription,
     })
@@ -56,6 +55,16 @@ const getCurrent = async (req, res) => {
     })
 }
 
+const updateSubscription = async (req, res) => {
+    const { subscription } = req.body
+    const { email } = req.user
+    
+        res.json({
+        email,
+        subscription,
+    })
+}
+
 const logout = async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, { token: "" })
     
@@ -68,5 +77,6 @@ module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout)
+    logout: ctrlWrapper(logout),
+    updateSubscription: ctrlWrapper(updateSubscription),
 }
