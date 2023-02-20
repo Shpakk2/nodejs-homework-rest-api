@@ -58,6 +58,7 @@ const getCurrent = async (req, res) => {
 const updateSubscription = async (req, res) => {
     const { subscription } = req.body
     const { email } = req.user
+    await User.findByIdAndUpdate(req.user._id, { subscription: subscription })
     
         res.json({
         email,
